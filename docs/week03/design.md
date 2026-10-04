@@ -5,3 +5,7 @@ H2 — Hierarchy pass
 Home Screen: Elemen utama adalah koleksi dan progress drama. Judul drama dibuat lebih tegas dan progress episode menggunakan warna primary agar lebih mudah dilihat.
 Detail Screen: Elemen utama adalah progress tontonan. Bagian Progress dibuat lebih menonjol dengan teks bold dan jumlah episode menggunakan warna primary.
 Add Screen: Elemen utama adalah tombol Add to Vault karena merupakan aksi utama untuk menambahkan drama ke koleksi. Tombol Add to Vault dibuat lebih menonjol dengan menggunakan tombol berwarna primary sebagai aksi utama.
+
+H3 — Component audit
+Untuk komponen yang saya gunakan, seperti FilledButton, SnackBar, Card, Chip, TextField, DropdownButtonFormField, CheckboxListTile, LinearProgressIndicator, dan NavigationBar, semuanya sudah menggunakan Material Component yang tersedia di Flutter. 
+Sedangkan custom widget seperti DramaCard, DramaSearch, StatusFilter, CollectionSummary, dan AppEmptyState saya buat khusus untuk kebutuhan aplikasi, jadi tidak menggantikan komponen Material yang sudah tersedia.
