@@ -17,8 +17,23 @@ class DramaCard extends StatelessWidget {
     }
   }
 
+  Color statusColor(BuildContext context) {
+    switch (drama.status) {
+      case DramaStatus.backlog:
+        return Colors.orange;
+      case DramaStatus.watching:
+        return Colors.green;
+      case DramaStatus.finished:
+        return Theme.of(context).colorScheme.primary;
+      case DramaStatus.dropped:
+        return Colors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final color = statusColor(context);
+
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -28,10 +43,29 @@ class DramaCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(children: [
-                Expanded(child: Text(drama.title, style: Theme.of(context).textTheme.titleMedium)),
-                Chip(label: Text(statusLabel)),
-              ]),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      drama.title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Chip(
+                    backgroundColor: color.withValues(alpha: 0.12),
+                    side: BorderSide(
+                      color: color.withValues(alpha: 0.5),
+                    ),
+                    label: Text(
+                      statusLabel,
+                      style: TextStyle(
+                        color: color,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 8),
               Text('${drama.year} • ${drama.genre.join(' • ')}'),
               const SizedBox(height: 12),
@@ -41,6 +75,10 @@ class DramaCard extends StatelessWidget {
               const SizedBox(height: 6),
               Text(
                 '${drama.watchedCount}/${drama.episodes} episodes',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),

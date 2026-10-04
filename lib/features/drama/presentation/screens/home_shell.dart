@@ -88,7 +88,17 @@ class _CollectionPage extends StatelessWidget {
     return SafeArea(
       child: CustomScrollView(
         slivers: [
-          const SliverAppBar.large(title: Text('K-Drama')),
+          SliverAppBar.large(
+            centerTitle: true,
+            title: const Center(
+              child: Text(
+                'K-Drama',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
           SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.all(16), child: DramaSearch(controller: controller, onChanged: onQueryChanged))),
           SliverToBoxAdapter(child: Padding(padding: const EdgeInsets.fromLTRB(16, 12, 16, 0), child: StatusFilter(value: status, onChanged: onStatusChanged))),
           FutureBuilder<List<Drama>>(

@@ -60,15 +60,21 @@ class _DetailScreenState extends State<DetailScreen> {
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          Text(
-            widget.drama.title,
-            style: Theme.of(context).textTheme.headlineMedium,
+          Center(
+            child: Text(
+              widget.drama.title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
 
           const SizedBox(height: 8),
 
           Text(
             '${widget.drama.year} • ${widget.drama.genre.join(' • ')}',
+            textAlign: TextAlign.center,
           ),
 
           const SizedBox(height: 20),
@@ -81,7 +87,9 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: [
                   Text(
                     'Progress',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
 
                   const SizedBox(height: 12),
@@ -94,6 +102,10 @@ class _DetailScreenState extends State<DetailScreen> {
 
                   Text(
                     '$watched of $total episodes watched',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),

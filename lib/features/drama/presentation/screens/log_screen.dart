@@ -165,7 +165,12 @@ class _LogScreenState extends State<LogScreen> {
           FilledButton.icon(
             onPressed: _save,
             icon: const Icon(Icons.add),
-            label: const Text('Add to Vault'),
+            label: const Text(
+              'Add to Vault',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
