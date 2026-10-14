@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DramaSearch extends StatelessWidget {
-  const DramaSearch({super.key, required this.controller, required this.onChanged});
+  const DramaSearch(
+      {super.key, required this.controller, required this.onChanged});
 
   final TextEditingController controller;
   final ValueChanged<String> onChanged;

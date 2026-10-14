@@ -32,11 +32,11 @@ class _LogScreenState extends State<LogScreen> {
 
   Future<void> _save() async {
     final title = _titleController.text.trim();
+
     final totalEpisodes = int.tryParse(
       _episodesController.text.trim(),
     );
 
-    // Validate title
     if (title.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -46,7 +46,6 @@ class _LogScreenState extends State<LogScreen> {
       return;
     }
 
-    // Validate total episodes
     if (totalEpisodes == null || totalEpisodes <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -90,42 +89,47 @@ class _LogScreenState extends State<LogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a Drama'),
+        title: const Text(
+          'Add a Drama',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       body: ListView(
+        keyboardDismissBehavior:
+        ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.all(20),
         children: [
           Text(
             'Add a drama to your vault',
-            style: Theme.of(context).textTheme.headlineSmall,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.headlineSmall,
           ),
-
           const SizedBox(height: 8),
-
           const Text(
             'Enter the drama information. '
                 'You can mark individual episodes as watched later.',
           ),
-
           const SizedBox(height: 24),
-
-          // Drama title
           TextField(
             controller: _titleController,
+            maxLines: 1,
+            textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
               labelText: 'Drama title',
               hintText: 'e.g. Queen of Tears',
               prefixIcon: Icon(Icons.movie_outlined),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Total episodes
           TextField(
             controller: _episodesController,
+            maxLines: 1,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: 'Total episodes',
@@ -133,11 +137,9 @@ class _LogScreenState extends State<LogScreen> {
               prefixIcon: Icon(Icons.format_list_numbered),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // Status
           DropdownButtonFormField<DramaStatus>(
+            isExpanded: true,
             initialValue: _status,
             decoration: const InputDecoration(
               labelText: 'Status',
@@ -149,6 +151,8 @@ class _LogScreenState extends State<LogScreen> {
                   value: status,
                   child: Text(
                     _statusLabel(status),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 );
               },
@@ -159,14 +163,14 @@ class _LogScreenState extends State<LogScreen> {
               });
             },
           ),
-
           const SizedBox(height: 24),
-
           FilledButton.icon(
             onPressed: _save,
             icon: const Icon(Icons.add),
             label: const Text(
               'Add to Vault',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -181,13 +185,10 @@ class _LogScreenState extends State<LogScreen> {
     switch (status) {
       case DramaStatus.backlog:
         return 'Backlog';
-
       case DramaStatus.watching:
         return 'Watching';
-
       case DramaStatus.finished:
         return 'Finished';
-
       case DramaStatus.dropped:
         return 'Dropped';
     }

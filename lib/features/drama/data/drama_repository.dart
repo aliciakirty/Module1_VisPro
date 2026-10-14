@@ -4,11 +4,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/models/drama.dart';
 
+enum DramaDataMode {
+  normal,
+  longName,
+  zeroItems,
+  manyItems,
+}
+
 class DramaRepository {
   static const String _storageKey = 'dramas';
 
-  final SharedPreferencesAsync _prefs =
-  SharedPreferencesAsync();
+  final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
+
+  final DramaDataMode mode;
 
   bool _loaded = false;
 
@@ -20,14 +28,27 @@ class DramaRepository {
       year: 2023,
       episodes: 16,
       watchedEpisodes: {
-        1, 2, 3, 4, 5, 6, 7, 8,
-        9, 10, 11, 12, 13, 14, 15, 16,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
       },
       status: DramaStatus.finished,
       rating: 5,
       description:
-      'A music-loving student travels through time '
-          'and meets his father as a teenager.',
+      'A music-loving student travels through time and meets his father as a teenager.',
     ),
     const Drama(
       id: '2',
@@ -36,14 +57,23 @@ class DramaRepository {
       year: 2023,
       episodes: 20,
       watchedEpisodes: {
-        1, 2, 3, 4, 5, 6,
-        7, 8, 9, 10, 11, 12,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
       },
       status: DramaStatus.watching,
       rating: null,
       description:
-      'Teenagers with hidden superpowers uncover '
-          'the extraordinary histories of their parents.',
+      'Teenagers with hidden superpowers uncover the extraordinary histories of their parents.',
     ),
     const Drama(
       id: '3',
@@ -55,8 +85,7 @@ class DramaRepository {
       status: DramaStatus.backlog,
       rating: null,
       description:
-      'A married couple faces a crisis while '
-          'rediscovering what brought them together.',
+      'A married couple faces a crisis while rediscovering what brought them together.',
     ),
     const Drama(
       id: '4',
@@ -65,24 +94,48 @@ class DramaRepository {
       year: 2022,
       episodes: 20,
       watchedEpisodes: {
-        1, 2, 3, 4, 5,
-        6, 7, 8, 9, 10,
-        11, 12, 13, 14, 15,
-        16, 17, 18, 19, 20,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
       },
       status: DramaStatus.finished,
       rating: 4.5,
       description:
-      'Mages and warriors navigate a world shaped '
-          'by a forbidden soul-shifting magic.',
+      'Mages and warriors navigate a world shaped by a forbidden soul-shifting magic.',
     ),
   ];
+
+  DramaRepository({
+    this.mode = DramaDataMode.normal,
+  });
 
   Future<void> _load() async {
     if (_loaded) return;
 
-    final savedData =
-    await _prefs.getStringList(_storageKey);
+    if (mode != DramaDataMode.normal) {
+      _items = _buildTestData();
+      _loaded = true;
+      return;
+    }
+
+    final savedData = await _prefs.getStringList(_storageKey);
 
     if (savedData != null) {
       _items = savedData
@@ -95,6 +148,46 @@ class DramaRepository {
     }
 
     _loaded = true;
+  }
+
+  List<Drama> _buildTestData() {
+    switch (mode) {
+      case DramaDataMode.normal:
+        return List<Drama>.from(_items);
+
+      case DramaDataMode.longName:
+        return [
+          _items.first.copyWith(
+            title:
+            'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+          ),
+          ..._items.skip(1),
+        ];
+
+      case DramaDataMode.zeroItems:
+        return [];
+
+      case DramaDataMode.manyItems:
+        return List.generate(
+          500,
+              (index) {
+            final number = index + 1;
+
+            return Drama(
+              id: 'test-$number',
+              title: 'Drama No. $number',
+              genre: const ['Drama', 'Test'],
+              year: 2020 + (number % 6),
+              episodes: 16,
+              watchedEpisodes: const {},
+              status: DramaStatus.backlog,
+              rating: null,
+              description:
+              'Generated test drama number $number for the Lab 04 stress test.',
+            );
+          },
+        );
+    }
   }
 
   Future<void> _save() async {

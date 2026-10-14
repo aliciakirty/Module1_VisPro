@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 
 import 'core/theme/app_theme.dart';
-import 'features/drama/data/drama_repository.dart';
 import 'features/drama/presentation/screens/home_shell.dart';
+import 'features/harness/device_harness.dart';
 
 void main() {
-  final repository = DramaRepository();
-  runApp(DramaApp(repository: repository));
+  runApp(const DramaApp());
 }
 
 class DramaApp extends StatelessWidget {
-  const DramaApp({super.key, required this.repository});
-
-  final DramaRepository repository;
+  const DramaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,13 @@ class DramaApp extends StatelessWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
-      home: HomeShell(repository: repository),
+      home: DeviceHarness(
+        childBuilder: (repository) {
+          return HomeShell(
+            repository: repository,
+          );
+        },
+      ),
     );
   }
 }

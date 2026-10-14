@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 import '../../domain/models/drama.dart';
 
 class DramaCard extends StatelessWidget {
-  const DramaCard({super.key, required this.drama, required this.onTap});
+  const DramaCard({
+    super.key,
+    required this.drama,
+    required this.onTap,
+  });
 
   final Drama drama;
   final VoidCallback onTap;
 
   String get statusLabel {
     switch (drama.status) {
-      case DramaStatus.backlog: return 'Backlog';
-      case DramaStatus.watching: return 'Watching';
-      case DramaStatus.finished: return 'Finished';
-      case DramaStatus.dropped: return 'Dropped';
+      case DramaStatus.backlog:
+        return 'Backlog';
+      case DramaStatus.watching:
+        return 'Watching';
+      case DramaStatus.finished:
+        return 'Finished';
+      case DramaStatus.dropped:
+        return 'Dropped';
     }
   }
 
@@ -30,57 +38,100 @@ class DramaCard extends StatelessWidget {
     }
   }
 
+  Widget _buildStatusChip(Color color) {
+    return Chip(
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      backgroundColor: color.withValues(alpha: 0.12),
+      side: BorderSide(
+        color: color.withValues(alpha: 0.5),
+      ),
+      label: Text(
+        statusLabel,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final color = statusColor(context);
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Card(
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          padding: const EdgeInsets.all(12),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final isNarrow = constraints.maxWidth < 320;
+
+              final title = Text(
+                drama.title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+                style: textTheme.titleMedium,
+              );
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      drama.title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                  if (isNarrow) ...[
+                    title,
+                    const SizedBox(height: 2),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: _buildStatusChip(color),
                     ),
+                  ] else
+                    Row(
+                      children: [
+                        Expanded(
+                          child: title,
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: _buildStatusChip(color),
+                          ),
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 6),
+                  Text(
+                    '${drama.year} • ${drama.genre.join(' • ')}',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
                   ),
-                  Chip(
-                    backgroundColor: color.withValues(alpha: 0.12),
-                    side: BorderSide(
-                      color: color.withValues(alpha: 0.5),
-                    ),
-                    label: Text(
-                      statusLabel,
-                      style: TextStyle(
-                        color: color,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  const SizedBox(height: 8),
+                  LinearProgressIndicator(
+                    value: drama.progress,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '${drama.watchedCount}/${drama.episodes} episodes',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.titleMedium?.copyWith(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
-              ),
-              const SizedBox(height: 8),
-              Text('${drama.year} • ${drama.genre.join(' • ')}'),
-              const SizedBox(height: 12),
-              LinearProgressIndicator(
-                value: drama.progress,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                '${drama.watchedCount}/${drama.episodes} episodes',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),

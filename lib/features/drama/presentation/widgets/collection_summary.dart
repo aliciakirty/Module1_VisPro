@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CollectionSummary extends StatelessWidget {
-  const CollectionSummary({super.key, required this.total, required this.finished});
+  const CollectionSummary(
+      {super.key, required this.total, required this.finished});
 
   final int total;
   final int finished;

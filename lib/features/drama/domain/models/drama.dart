@@ -30,8 +30,7 @@ class Drama {
 
   int get watchedCount => watchedEpisodes.length;
 
-  double get progress =>
-      episodes == 0 ? 0 : watchedCount / episodes;
+  double get progress => episodes == 0 ? 0 : watchedCount / episodes;
 
   Map<String, dynamic> toJson() {
     return {
@@ -69,6 +68,7 @@ class Drama {
   }
 
   Drama copyWith({
+    String? title,
     int? episodes,
     Set<int>? watchedEpisodes,
     DramaStatus? status,
@@ -76,23 +76,19 @@ class Drama {
   }) {
     final totalEpisodes = episodes ?? this.episodes;
 
-    final validWatched =
-    (watchedEpisodes ?? this.watchedEpisodes)
+    final validWatched = (watchedEpisodes ?? this.watchedEpisodes)
         .where(
-          (episode) =>
-      episode >= 1 &&
-          episode <= totalEpisodes,
+          (episode) => episode >= 1 && episode <= totalEpisodes,
     )
         .toSet();
 
     return Drama(
       id: id,
-      title: title,
+      title: title ?? this.title,
       genre: genre,
       year: year,
       episodes: totalEpisodes,
-      watchedEpisodes:
-      Set.unmodifiable(validWatched),
+      watchedEpisodes: Set.unmodifiable(validWatched),
       status: status ?? this.status,
       rating: rating ?? this.rating,
       description: description,
