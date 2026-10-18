@@ -4,12 +4,7 @@ import '../../data/drama_repository.dart';
 import '../../domain/models/drama.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({
-    super.key,
-    required this.drama,
-    required this.repository,
-    required this.onUpdated,
-  });
+  const DetailScreen({super.key, required this.drama, required this.repository, required this.onUpdated,});
 
   final Drama drama;
   final DramaRepository repository;
@@ -39,14 +34,9 @@ class _DetailScreenState extends State<DetailScreen> {
     if (!mounted) return;
 
     setState(() {
-      if (_watchedEpisodes.contains(episode)) {
-        _watchedEpisodes.remove(episode);
-      } else {
-        _watchedEpisodes.add(episode);
-      }
-    });
-
-    widget.onUpdated();
+      if (_watchedEpisodes.contains(episode)) {_watchedEpisodes.remove(episode);}
+      else {_watchedEpisodes.add(episode);}
+    }); widget.onUpdated();
   }
 
   @override
@@ -57,11 +47,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Drama Details',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+        title: const Text('Drama Details', maxLines: 1, overflow: TextOverflow.ellipsis,),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -73,12 +59,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  20,
-                  horizontalPadding,
-                  0,
-                ),
+                padding: EdgeInsets.fromLTRB(horizontalPadding, 20, horizontalPadding, 0,),
                 sliver: SliverToBoxAdapter(
                   child: Column(
                     children: [
@@ -88,10 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Text(
                           widget.drama.title,
-                          textAlign: TextAlign.center,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
+                          textAlign: TextAlign.center, maxLines: 3, overflow: TextOverflow.ellipsis, style: Theme.of(context)
                               .textTheme
                               .headlineMedium
                               ?.copyWith(
@@ -100,12 +78,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        '${widget.drama.year} • '
-                            '${widget.drama.genre.join(' • ')}',
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                      Text('${widget.drama.year} • ' '${widget.drama.genre.join(' • ')}',
+                        textAlign: TextAlign.center, maxLines: 2, overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 20),
                       Card(
@@ -115,11 +89,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             crossAxisAlignment:
                             CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Progress',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: Theme.of(context)
+                              Text('Progress', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context)
                                     .textTheme
                                     .titleLarge
                                     ?.copyWith(
@@ -131,10 +101,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                 value: progress,
                               ),
                               const SizedBox(height: 8),
-                              Text(
-                                '$watched of $total episodes watched',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              Text('$watched of $total episodes watched', maxLines: 1, overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -150,13 +117,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Episodes',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
+                      Align(alignment: Alignment.centerLeft, child: Text('Episodes', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context)
                               .textTheme
                               .titleLarge,
                         ),
@@ -164,12 +125,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Tap an episode after you finish watching it. '
-                              'Your progress updates automatically.',
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
+                        child: Text('Tap an episode after you finish watching it. ' 'Your progress updates automatically.', maxLines: 3, overflow: TextOverflow.ellipsis, style: Theme.of(context)
                               .textTheme
                               .bodyMedium,
                         ),
@@ -183,12 +139,9 @@ class _DetailScreenState extends State<DetailScreen> {
                 padding: EdgeInsets.symmetric(
                   horizontal: horizontalPadding,
                 ),
-                sliver: SliverList.builder(
-                  itemCount: total,
-                  itemBuilder: (context, index) {
+                sliver: SliverList.builder(itemCount: total, itemBuilder: (context, index) {
                     final episode = index + 1;
-                    final isWatched =
-                    _watchedEpisodes.contains(episode);
+                    final isWatched = _watchedEpisodes.contains(episode);
 
                     return Card(
                       margin: const EdgeInsets.only(bottom: 8),
@@ -196,10 +149,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         value: isWatched,
                         onChanged: (_) =>
                             _toggleEpisode(episode),
-                        title: Text(
-                          'Episode $episode',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                        title: Text('Episode $episode', maxLines: 1, overflow: TextOverflow.ellipsis,
                         ),
                         secondary: Icon(
                           isWatched
@@ -213,27 +163,20 @@ class _DetailScreenState extends State<DetailScreen> {
               ),
               SliverPadding(
                 padding: EdgeInsets.fromLTRB(
-                  horizontalPadding,
-                  12,
-                  horizontalPadding,
-                  32,
+                  horizontalPadding, 12,
+                  horizontalPadding, 32,
                 ),
                 sliver: SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment:
                     CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'About',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
+                      Text('About', maxLines: 1, overflow: TextOverflow.ellipsis, style: Theme.of(context)
                             .textTheme
                             .titleMedium,
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        widget.drama.description,
+                      Text( widget.drama.description,
                       ),
                     ],
                   ),

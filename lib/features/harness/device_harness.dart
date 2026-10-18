@@ -469,7 +469,14 @@ class _DeviceHarnessState extends State<DeviceHarness> {
         useMaterial3: true,
       ),
       child: ClipRect(
-        child: child,
+        child: Navigator(
+          key: ValueKey(data),
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+              builder: (context) => child,
+            );
+          },
+        ),
       ),
     );
   }
@@ -487,23 +494,23 @@ class _DeviceHarnessState extends State<DeviceHarness> {
       ),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
             child: Row(
               children: [
-                const SizedBox(width: 6),
-                const Icon(
+                SizedBox(width: 6),
+                Icon(
                   Icons.keyboard,
                   color: Color(0xFFBFC4C9),
                   size: 15,
                 ),
-                const Spacer(),
-                const Icon(
+                Spacer(),
+                Icon(
                   Icons.mic_none,
                   color: Color(0xFFBFC4C9),
                   size: 17,
                 ),
-                const SizedBox(width: 8),
+                SizedBox(width: 8),
               ],
             ),
           ),

@@ -4,20 +4,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../domain/models/drama.dart';
 
-enum DramaDataMode {
-  normal,
-  longName,
-  zeroItems,
-  manyItems,
-}
+enum DramaDataMode {normal, longName, zeroItems, manyItems, }
 
 class DramaRepository {
   static const String _storageKey = 'dramas';
-
   final SharedPreferencesAsync _prefs = SharedPreferencesAsync();
-
   final DramaDataMode mode;
-
   bool _loaded = false;
 
   List<Drama> _items = [
@@ -27,24 +19,7 @@ class DramaRepository {
       genre: ['Romance', 'Youth'],
       year: 2023,
       episodes: 16,
-      watchedEpisodes: {
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-      },
+      watchedEpisodes: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,},
       status: DramaStatus.finished,
       rating: 5,
       description:
@@ -56,20 +31,7 @@ class DramaRepository {
       genre: ['Action', 'Fantasy'],
       year: 2023,
       episodes: 20,
-      watchedEpisodes: {
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-      },
+      watchedEpisodes: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,},
       status: DramaStatus.watching,
       rating: null,
       description:
@@ -93,28 +55,7 @@ class DramaRepository {
       genre: ['Fantasy', 'Romance'],
       year: 2022,
       episodes: 20,
-      watchedEpisodes: {
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-      },
+      watchedEpisodes: {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,},
       status: DramaStatus.finished,
       rating: 4.5,
       description:
@@ -143,10 +84,8 @@ class DramaRepository {
             (item) => Drama.fromJson(
           jsonDecode(item) as Map<String, dynamic>,
         ),
-      )
-          .toList();
+      ) .toList();
     }
-
     _loaded = true;
   }
 
@@ -198,28 +137,22 @@ class DramaRepository {
         .toList();
 
     await _prefs.setStringList(
-      _storageKey,
-      data,
-    );
+      _storageKey, data,);
   }
 
   Future<List<Drama>> getDramas() async {
     await _load();
-
     return List.unmodifiable(_items);
   }
 
   Future<void> add(Drama drama) async {
     await _load();
-
     _items.add(drama);
-
     await _save();
   }
 
   Future<void> update(Drama drama) async {
     await _load();
-
     final index = _items.indexWhere(
           (item) => item.id == drama.id,
     );
@@ -235,33 +168,24 @@ class DramaRepository {
       int episode,
       ) async {
     await _load();
-
     final index = _items.indexWhere(
           (item) => item.id == dramaId,
     );
 
     if (index == -1) return;
-
     final drama = _items[index];
-
     final watchedEpisodes = <int>{
       ...drama.watchedEpisodes,
     };
 
-    if (watchedEpisodes.contains(episode)) {
-      watchedEpisodes.remove(episode);
-    } else {
-      watchedEpisodes.add(episode);
+    if (watchedEpisodes.contains(episode)) { watchedEpisodes.remove(episode);
+    } else { watchedEpisodes.add(episode);
     }
 
     final DramaStatus status;
-
-    if (watchedEpisodes.isEmpty) {
-      status = DramaStatus.backlog;
-    } else if (watchedEpisodes.length >= drama.episodes) {
-      status = DramaStatus.finished;
-    } else {
-      status = DramaStatus.watching;
+    if (watchedEpisodes.isEmpty) { status = DramaStatus.backlog;
+    } else if (watchedEpisodes.length >= drama.episodes) { status = DramaStatus.finished;
+    } else { status = DramaStatus.watching;
     }
 
     _items[index] = drama.copyWith(
